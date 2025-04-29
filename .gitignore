@@ -1,0 +1,57 @@
+# Node modules
+node_modules/
+
+# Diretório de build
+dist/
+build/
+
+# Arquivos de log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Ambiente
+.env
+.env.* 
+.env.local
+
+# Configurações de IDE
+.vscode/
+.idea/
+*.sw?
+
+# Cache
+.cache/
+.next/
+out/
+*.log
+
+# Sistema operacional
+.DS_Store
+Thumbs.db
+
+# Test coverage
+coverage/
+
+# Relatórios temporários
+*.tgz
+*.gz
+
+# Arquivos do TypeScript (caso compile manualmente)
+*.tsbuildinfo
+
+# PWA ou Webpack temporários
+webpack-stats.json
+
+# Arquivos locais de banco de dados ou uploads
+uploads/
+tmp/
+temp/
+
+# Ignore arquivos de deploy local
+*.local
+*.pid
+
+# Logs de lint ou test runners
+eslintcache
