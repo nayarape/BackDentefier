@@ -76,13 +76,6 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs, {
   customCss: '.swagger-ui .topbar { display: none }'
 }));
 
-// Servir front-end
-const publicPath = path.join(__dirname, '../../frontend/public');
-app.use(express.static(publicPath));
-app.get('/', (req, res) => {
-  res.sendFile(path.join(publicPath, 'index.html'));
-});
-
 // Endpoint seguro da chave da API
 app.get('/api/config', (_req, res) => {
   if (!process.env.GOOGLE_MAPS_API_KEY) {
