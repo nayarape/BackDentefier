@@ -1,5 +1,4 @@
 "use strict";
-
 import express from 'express';
 import cors from 'cors';
 import connectDB from './config/db';
@@ -12,13 +11,10 @@ import authRoutes from './routes/authRoutes';
 import userRoutes from './routes/userRoutes';
 import evidenciaRoutes from './routes/evidenciaRoutes';
 import { parseCookies } from './middlewares/authMiddleware';
-
 // Swagger
 const swaggerJsDoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
-
 dotenv.config();
-
 const app = express();
 const API_KEY = process.env.GOOGLE_MAPS_API_KEY;
 
@@ -38,8 +34,8 @@ const swaggerOptions = {
     servers: [
       {
         url: process.env.NODE_ENV === 'production'
-          ? 'https://seu-site-producao.com'
-          : `http://localhost:${process.env.PORT || 3000}`,
+          ? 'https://backdentefier-1.onrender.com'  // URL atualizada para o Render
+          : `http://localhost:${process.env.PORT || 10000}`,  // Porta atualizada para 10000
         description: process.env.NODE_ENV === 'production' ? 'Servidor de produção' : 'Servidor de desenvolvimento'
       }
     ],
@@ -55,15 +51,16 @@ const swaggerOptions = {
   },
   apis: ['./dist/routes/*.js', './dist/models/*.js']
 };
-
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
 
 // Conecta ao MongoDB
 connectDB();
 
 // Middlewares
+// MODIFICAÇÃO IMPORTANTE: Configuração CORS para aceitar Netlify e localhost
 app.use(cors({
-  origin: 'http://localhost:3000',
+  // Aceita tanto o domínio Netlify quanto localhost para desenvolvimento
+  origin: ['https://dentefier.netlify.app', 'http://localhost:3000'],
   credentials: true
 }));
 app.use(cookieParser());
@@ -104,6 +101,15 @@ app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/evidencias', evidenciaRoutes);
 
+// Adicionar rota básica para verificar se a API está funcionando
+app.get('/', (_req, res) => {
+  res.json({ 
+    status: 'online', 
+    message: 'API backend funcionando!',
+    docs: '/api-docs'
+  });
+});
+
 // Middleware de erro
 app.use((err: any, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
   console.error('Erro interno:', err);
@@ -111,7 +117,8 @@ app.use((err: any, _req: express.Request, res: express.Response, _next: express.
 });
 
 // Inicia servidor
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 10000;  // Porta padrão mudada para 10000 para corresponder ao Render
+
 // Rota para expor o JSON do Swagger
 app.get('/swagger.json', (_req, res) => {
   res.setHeader('Content-Type', 'application/json');
